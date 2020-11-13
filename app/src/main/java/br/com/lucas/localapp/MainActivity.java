@@ -11,10 +11,14 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 //Commit
@@ -23,12 +27,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 
 
+
+
     public void novaLocalidade (View view){
-        Intent intent = new Intent(this , CadastroLocalidade.class);
-        startActivity(intent);
+       // Uri gmmIntentUri = Uri.parse(String.format("geo:%f,%f?q=", latitudeAtual, longitudeAtual));
+        Intent mapIntent = new Intent(this, CadastroLocalidade.class);
+       // mapIntent.setPackage("com.google.android.apps.maps");
+        //Intent intent = new Intent(this , CadastroLocalidade.class);
+        startActivity(mapIntent);
     }
 }

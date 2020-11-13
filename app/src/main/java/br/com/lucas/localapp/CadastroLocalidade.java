@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 public class CadastroLocalidade extends AppCompatActivity {
@@ -21,7 +22,7 @@ public class CadastroLocalidade extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private static final int GPS_REQUEST_PERMISION_CODE = 1001;
-    private TextView Localidade;
+    public TextView coordenadas;
     private double latitudeAtual;
     private double longitudeAtual;
 
@@ -29,7 +30,7 @@ public class CadastroLocalidade extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_localidade);
-        Localidade =  findViewById(R.id.Localidade);
+        coordenadas = findViewById(R.id.coordenadas);
         locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -39,11 +40,11 @@ public class CadastroLocalidade extends AppCompatActivity {
                 double lon = location.getLongitude();
                 latitudeAtual = lat;
                 longitudeAtual = lon;
-                Localidade.setText(String.format("Lat: %f, Long: %f", lat, lon));
+                coordenadas.setText(String.format("Lat: %f, Long: %f", lat, lon));
+
             }
             @Override
-            public void onStatusChanged(String provider, int status, Bundle
-                    extras) {
+            public void onStatusChanged(String provider, int status, Bundle extras) {
             }
             @Override
             public void onProviderEnabled(String provider) {
@@ -52,8 +53,8 @@ public class CadastroLocalidade extends AppCompatActivity {
             public void onProviderDisabled(String provider) {
             }
         };
-    }
 
+        }
 
     @Override
     public void onStart(){
@@ -61,7 +62,7 @@ public class CadastroLocalidade extends AppCompatActivity {
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER
-                    , 5000, 100, locationListener);
+                    , 0, 0, locationListener);
         }
         else{
             ActivityCompat.requestPermissions(this,
@@ -90,11 +91,9 @@ public class CadastroLocalidade extends AppCompatActivity {
         locationManager.removeUpdates(locationListener);
     }
 
-
     public void inserirLocalidade (View view){
-        Uri gmmIntentUri = Uri.parse(String.format("geo:%f,%f?q=restaurantes", latitudeAtual, longitudeAtual));
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
+    Intent intent = new Intent(this, MainActivity.class);
+    startActivity(intent);
+
     }
 }
