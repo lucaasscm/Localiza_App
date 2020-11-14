@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,16 +14,33 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class CadastroLocalidade extends AppCompatActivity {
 
+    private static final String TAG = "" ;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private LocationManager locationManager;
     private LocationListener locationListener;
     private static final int GPS_REQUEST_PERMISION_CODE = 1001;
-    public TextView coordenadas;
+    private TextView coordenadas;
+    private EditText EditTextDescricao;
+    private EditText EditTextData;
     private double latitudeAtual;
     private double longitudeAtual;
 
@@ -30,6 +48,8 @@ public class CadastroLocalidade extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_localidade);
+        EditTextDescricao = findViewById(R.id.descricao);
+        EditTextData = findViewById(R.id.data);
         coordenadas = findViewById(R.id.coordenadas);
         locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
@@ -92,8 +112,45 @@ public class CadastroLocalidade extends AppCompatActivity {
     }
 
     public void inserirLocalidade (View view){
+        //Declarando variáveis
+        String descricao = EditTextDescricao.getText().toString().trim();
+        String data = EditTextData.getText().toString().trim();
+        Location location = new Location("");
+       double latitudeAtual = location.getLatitude();
+       double longitudeAtual = location.getLongitude();
+        //Chamando função que vai subir os dados no db
+        uploadData(descricao, data, latitudeAtual, longitudeAtual);
+
     Intent intent = new Intent(this, MainActivity.class);
     startActivity(intent);
 
     }
-}
+
+    public void uploadData(String descricao, String data, double latitudeAtual, double longitudeAtual){
+        //Criando id aleatória
+        String id = UUID.randomUUID().toString();
+
+        //Criando documento no db
+        Map<String, Object> localidade = new HashMap<>();
+        localidade.put("id", id);
+        localidade.put("Descrição", descricao);
+        localidade.put("Lat", latitudeAtual);
+        localidade.put("Lon", longitudeAtual);
+        localidade.put("Data", data);
+
+        db.collection("Locais").document(id).set(localidade)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Local Salvo com Sucesso");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Erro!", e);
+                    }
+                });
+
+        }
+    }

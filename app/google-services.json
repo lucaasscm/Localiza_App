@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1027817823791",
+    "firebase_url": "https://localiza-253d6.firebaseio.com",
+    "project_id": "localiza-253d6",
+    "storage_bucket": "localiza-253d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027817823791:android:0f53bc1c1b5977b6cef0da",
+        "android_client_info": {
+          "package_name": "br.com.lucas.localapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027817823791-012avn9ait4hnnl8raq43or5h0qunane.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyrBZv9sfmOTXvMrvswNpPLakF2ngWFZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027817823791-012avn9ait4hnnl8raq43or5h0qunane.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
