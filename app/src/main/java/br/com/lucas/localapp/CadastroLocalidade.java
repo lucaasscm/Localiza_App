@@ -41,8 +41,8 @@ public class CadastroLocalidade extends AppCompatActivity {
     private TextView coordenadas;
     private EditText EditTextDescricao;
     private EditText EditTextData;
-    private double latitudeAtual;
-    private double longitudeAtual;
+    public double latitudeAtual;
+    public double longitudeAtual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
