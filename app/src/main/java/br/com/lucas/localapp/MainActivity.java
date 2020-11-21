@@ -1,6 +1,7 @@
 package br.com.lucas.localapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,10 +34,11 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "";
+    private static final String TAG = "MainActivity";
     List<Localidade> localidadeList = new ArrayList<>();
      RecyclerView myRecyclerView;
 
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     LocalidadeAdapter adapter;
+    Context context;
 
 
     @Override
@@ -60,31 +64,43 @@ public class MainActivity extends AppCompatActivity {
         myRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         myRecyclerView.setLayoutManager(layoutManager);
+        //adapter
+        adapter = new LocalidadeAdapter(MainActivity.this, localidadeList, db);
+
+        //Set adapter na recyclerview
+        myRecyclerView.setAdapter(adapter);
 
         //Mostrar dados na recyclerview
         showData();
     }
 
     private void showData() {
+
         db.collection("Locais")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         //Quando sucesso
                         Log.d(TAG, "Local Salvo com Sucesso");
                         //Mostrando os dados
+                        localidadeList.clear();
                         for(DocumentSnapshot documentSnapshot: task.getResult()){
-                            Localidade localidade = new Localidade(documentSnapshot.getDouble("lat"),
-                                    documentSnapshot.getDouble("lon"),
-                                    documentSnapshot.getString("data"),
-                                    documentSnapshot.getString("descricao"));
+                            Log.d("ERRO!!!!", documentSnapshot.getId());
+                            Map<String, Object> dados = documentSnapshot.getData();
+                            String data = (String) dados.get("data");
+                            String descricao = (String) dados.get("descricao");
+                            Log.d("ERRO!!!!", descricao);
+                            double lat =(double) dados.get("lat");
+                            double lon = (double)dados.get("lon");
+                            String id =(String) dados.get("id");
+                            Log.i("ERRO!!!", documentSnapshot.getId());
+                            Localidade localidade = new Localidade(
+                                    data, descricao,  lat,lon,  id);
                             localidadeList.add(localidade);
                         }
-                        //adapter
-                        adapter = new LocalidadeAdapter(MainActivity.this, localidadeList);
-                        //Set adapter na recyclerview
-                        myRecyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
 
                     }
                 })

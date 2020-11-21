@@ -27,8 +27,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class CadastroLocalidade extends AppCompatActivity {
@@ -51,8 +53,7 @@ public class CadastroLocalidade extends AppCompatActivity {
         EditTextDescricao = findViewById(R.id.descricao);
         EditTextData = findViewById(R.id.data);
         coordenadas = findViewById(R.id.coordenadas);
-        locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -117,26 +118,29 @@ public class CadastroLocalidade extends AppCompatActivity {
         String data = EditTextData.getText().toString().trim();
         Location location = new Location("");
        double latitudeAtual = location.getLatitude();
+
        double longitudeAtual = location.getLongitude();
+
         //Chamando função que vai subir os dados no db
-        uploadData(descricao, data, latitudeAtual, longitudeAtual);
+        uploadData(data, descricao, latitudeAtual, longitudeAtual);
 
     Intent intent = new Intent(this, MainActivity.class);
     startActivity(intent);
 
     }
 
-    public void uploadData(String descricao, String data, double latitudeAtual, double longitudeAtual){
+    public void uploadData(String data, String descricao, double latitudeAtual, double longitudeAtual){
         //Criando id aleatória
         String id = UUID.randomUUID().toString();
 
         //Criando documento no db
         Map<String, Object> localidade = new HashMap<>();
+        localidade.put("data", data);
+        localidade.put("descricao", descricao);
+        localidade.put("lat", latitudeAtual);
+        localidade.put("lon", longitudeAtual);
         localidade.put("id", id);
-        localidade.put("Descrição", descricao);
-        localidade.put("Lat", latitudeAtual);
-        localidade.put("Lon", longitudeAtual);
-        localidade.put("Data", data);
+
 
         db.collection("Locais").document(id).set(localidade)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
