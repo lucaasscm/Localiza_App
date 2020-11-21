@@ -32,6 +32,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -85,19 +87,21 @@ public class MainActivity extends AppCompatActivity {
                         //Quando sucesso
                         Log.d(TAG, "Local Salvo com Sucesso");
                         //Mostrando os dados
-                        localidadeList.clear();
                         for(DocumentSnapshot documentSnapshot: task.getResult()){
                             Log.d("ERRO!!!!", documentSnapshot.getId());
                             Map<String, Object> dados = documentSnapshot.getData();
                             String data = (String) dados.get("data");
+                            if (data == null || data.isEmpty()){
+                                data = String.valueOf(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                            }
                             String descricao = (String) dados.get("descricao");
                             Log.d("ERRO!!!!", descricao);
-                            double lat =(double) dados.get("lat");
-                            double lon = (double)dados.get("lon");
+                          //  Double lat =(Double) dados.get("lat");
+                         //   Double lon = (Double)dados.get("lon");
                             String id =(String) dados.get("id");
                             Log.i("ERRO!!!", documentSnapshot.getId());
                             Localidade localidade = new Localidade(
-                                    data, descricao,  lat,lon,  id);
+                                    data, descricao,(double)  dados.get("lat"),(double) dados.get("lon"),  id);
                             localidadeList.add(localidade);
                         }
                         adapter.notifyDataSetChanged();

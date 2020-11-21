@@ -51,7 +51,6 @@ public class CadastroLocalidade extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_localidade);
         EditTextDescricao = findViewById(R.id.descricao);
-        EditTextData = findViewById(R.id.data);
         coordenadas = findViewById(R.id.coordenadas);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -115,27 +114,25 @@ public class CadastroLocalidade extends AppCompatActivity {
     public void inserirLocalidade (View view){
         //Declarando variáveis
         String descricao = EditTextDescricao.getText().toString().trim();
-        String data = EditTextData.getText().toString().trim();
         Location location = new Location("");
        double latitudeAtual = location.getLatitude();
 
        double longitudeAtual = location.getLongitude();
 
         //Chamando função que vai subir os dados no db
-        uploadData(data, descricao, latitudeAtual, longitudeAtual);
+        uploadData( descricao, latitudeAtual, longitudeAtual);
 
     Intent intent = new Intent(this, MainActivity.class);
     startActivity(intent);
 
     }
 
-    public void uploadData(String data, String descricao, double latitudeAtual, double longitudeAtual){
+    public void uploadData(String descricao, double latitudeAtual, double longitudeAtual){
         //Criando id aleatória
         String id = UUID.randomUUID().toString();
 
         //Criando documento no db
         Map<String, Object> localidade = new HashMap<>();
-        localidade.put("data", data);
         localidade.put("descricao", descricao);
         localidade.put("lat", latitudeAtual);
         localidade.put("lon", longitudeAtual);
