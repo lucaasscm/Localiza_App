@@ -1,36 +1,29 @@
 package br.com.lucas.localapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 public class CadastroLocalidade extends AppCompatActivity {
@@ -56,12 +49,9 @@ public class CadastroLocalidade extends AppCompatActivity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                double lat = location.getLatitude();
-                double lon = location.getLongitude();
-                latitudeAtual = lat;
-                longitudeAtual = lon;
-                coordenadas.setText(String.format("Lat: %f, Long: %f", lat, lon));
-
+                latitudeAtual = location.getLatitude();
+                longitudeAtual = location.getLongitude();
+                coordenadas.setText(String.format("Lat: %f, Long: %f", latitudeAtual, longitudeAtual));
             }
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -115,11 +105,9 @@ public class CadastroLocalidade extends AppCompatActivity {
         //Declarando variáveis
         String descricao = EditTextDescricao.getText().toString().trim();
         Location location = new Location("");
-       double latitudeAtual = location.getLatitude();
+//        double latitudeAtual = location.getLatitude();
+//        double longitudeAtual = location.getLongitude();
 
-       double longitudeAtual = location.getLongitude();
-
-        //Chamando função que vai subir os dados no db
         uploadData( descricao, latitudeAtual, longitudeAtual);
 
     Intent intent = new Intent(this, MainActivity.class);

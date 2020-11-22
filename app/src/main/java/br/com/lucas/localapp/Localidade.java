@@ -11,8 +11,8 @@ import java.time.LocalDate;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Localidade {
-  private   double lat;
-   private double lon;
+    private   double lat;
+    private double lon;
     private String data = String.valueOf(LocalDate.now());
     private String descricao;
     private String id;
@@ -26,7 +26,6 @@ public class Localidade {
         this.descricao = descricao;
         this.lat = lat;
         this.lon = lon;
-
         this.id = id;
     }
 

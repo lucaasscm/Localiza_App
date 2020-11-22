@@ -84,24 +84,17 @@ public class MainActivity extends AppCompatActivity {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        //Quando sucesso
                         Log.d(TAG, "Local Salvo com Sucesso");
-                        //Mostrando os dados
                         for(DocumentSnapshot documentSnapshot: task.getResult()){
-                            Log.d("ERRO!!!!", documentSnapshot.getId());
                             Map<String, Object> dados = documentSnapshot.getData();
+                            String id =(String) dados.get("id");
                             String data = (String) dados.get("data");
                             if (data == null || data.isEmpty()){
                                 data = String.valueOf(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                             }
                             String descricao = (String) dados.get("descricao");
-                            Log.d("ERRO!!!!", descricao);
-                          //  Double lat =(Double) dados.get("lat");
-                         //   Double lon = (Double)dados.get("lon");
-                            String id =(String) dados.get("id");
-                            Log.i("ERRO!!!", documentSnapshot.getId());
                             Localidade localidade = new Localidade(
-                                    data, descricao,(double)  dados.get("lat"),(double) dados.get("lon"),  id);
+                                    data, descricao,(double) dados.get("lat"),(double)dados.get("lon"),  id);
                             localidadeList.add(localidade);
                         }
                         adapter.notifyDataSetChanged();
@@ -112,8 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         //Quando fracasso
-                        Log.w(TAG, "Erro!", e);
-
+                        Exception exception = e;
                     }
                 });
     }
