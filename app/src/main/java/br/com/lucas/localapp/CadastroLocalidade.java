@@ -28,7 +28,7 @@ import java.util.UUID;
 
 public class CadastroLocalidade extends AppCompatActivity {
 
-    private static final String TAG = "" ;
+    private static final String TAG = "Cadastro Localidade";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -104,7 +104,7 @@ public class CadastroLocalidade extends AppCompatActivity {
     public void inserirLocalidade (View view){
         //Declarando variáveis
         String descricao = EditTextDescricao.getText().toString().trim();
-        Location location = new Location("");
+       // Location location = new Location("");
 //        double latitudeAtual = location.getLatitude();
 //        double longitudeAtual = location.getLongitude();
 

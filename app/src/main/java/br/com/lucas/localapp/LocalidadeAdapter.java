@@ -11,16 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
 public class LocalidadeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
+    private static final String TAG = "Adapter";
    private MainActivity mainActivity;
    private List<Localidade> localidadesList;
   // private  Context context;
-    private FirebaseFirestore firebaseFirestore;
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     public LocalidadeAdapter(MainActivity mainActivity, List<Localidade> localidadesList,  FirebaseFirestore firebaseFirestore) {
         this.mainActivity = mainActivity;
@@ -37,25 +40,45 @@ public class LocalidadeAdapter extends RecyclerView.Adapter<ViewHolder> {
        //LayoutInflater inflater   = LayoutInflater.from(context);
         //View v = inflater.inflate(R.layout.localidade_item, parent, false);
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.localidade_item, parent, false);
-        return new ViewHolder(view);
+       // return new ViewHolder(view);
 
-        /*ViewHolder viewHolder = new ViewHolder(itemView);
+        ViewHolder viewHolder = new ViewHolder(view);
         //lidar com os cliques
-        viewHolder.serOnClickListener(new ViewHolder.ClickListener() {
+        viewHolder.setOnClickListener(new ViewHolder.ClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 //Chamado quando o usuário clicar no item
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemLongClick(View view, int position) {
                 //Chamado quando o usuário fizer um clique longo
+                deleteData(position);
             }
         });
 
-        return viewHolder;*/
+        return viewHolder;
 }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void deleteData(int index){
+        firebaseFirestore.collection("Locais").document(localidadesList.get(index).getId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Local Deletado com Sucesso");
+                        localidadesList.clear();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Erro!", e);
+                    }
+                });
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
