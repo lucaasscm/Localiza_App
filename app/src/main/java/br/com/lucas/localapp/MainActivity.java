@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private static final String TAG = "MainActivity";
     List<Localidade> localidadeList = new ArrayList<>();
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         showData();
     }
 
-    private void showData() {
+    public void showData() {
 
         db.collection("Locais")
                 .get()
@@ -108,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
                         Exception exception = e;
                     }
                 });
+    }
+
+    public void onItemLongClick(View view, int position){
+
     }
 
 

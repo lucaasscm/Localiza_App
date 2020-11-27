@@ -70,6 +70,8 @@ public class LocalidadeAdapter extends RecyclerView.Adapter<ViewHolder> {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Local Deletado com Sucesso");
                         localidadesList.clear();
+                        mainActivity.showData();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
