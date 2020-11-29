@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity  {
                             }
                             String descricao = (String) dados.get("descricao");
                             Localidade localidade = new Localidade(
-                                    data, descricao,(double) dados.get("lat"),(double)dados.get("lon"),  id);
+                                    data, (String) dados.get("descricao"),(double) dados.get("lat"),(double)dados.get("lon"),  id);
                             localidadeList.add(localidade);
                         }
                         adapter.notifyDataSetChanged();

@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/black_piano">
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -37,13 +38,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:backgroundTint="@color/colorAccent"
+        android:layout_margin="40dp"
+        app:fabCustomSize="70dp"
+        android:backgroundTint="@color/dourado"
         android:onClick="novaLocalidade"
         android:src="@drawable/ic_add"
-        app:layout_constraintHorizontal_bias="0.859"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="0.831" />
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

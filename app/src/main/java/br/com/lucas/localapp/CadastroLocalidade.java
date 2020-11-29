@@ -38,6 +38,8 @@ public class CadastroLocalidade extends AppCompatActivity {
     private EditText EditTextData;
     public double latitudeAtual;
     public double longitudeAtual;
+    CharSequence text = "Local salvo com Sucesso";
+    int duration = Toast.LENGTH_SHORT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,14 +103,17 @@ public class CadastroLocalidade extends AppCompatActivity {
         locationManager.removeUpdates(locationListener);
     }
 
+
+
+
+
     public void inserirLocalidade (View view){
         //Declarando variáveis
         String descricao = EditTextDescricao.getText().toString().trim();
-       // Location location = new Location("");
-//        double latitudeAtual = location.getLatitude();
-//        double longitudeAtual = location.getLongitude();
 
         uploadData( descricao, latitudeAtual, longitudeAtual);
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
 
     Intent intent = new Intent(this, MainActivity.class);
     startActivity(intent);

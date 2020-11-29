@@ -1,11 +1,11 @@
 package br.com.lucas.localapp;
 
-import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -24,6 +24,8 @@ public class LocalidadeAdapter extends RecyclerView.Adapter<ViewHolder> {
    private List<Localidade> localidadesList;
   // private  Context context;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+
 
     public LocalidadeAdapter(MainActivity mainActivity, List<Localidade> localidadesList,  FirebaseFirestore firebaseFirestore) {
         this.mainActivity = mainActivity;
@@ -51,18 +53,29 @@ public class LocalidadeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
             }
 
+
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemLongClick(View view, int position) {
                 //Chamado quando o usuário fizer um clique longo
-                deleteData(position);
+                ;
+                if (deleteData(position)){
+                    Toast.makeText(mainActivity, "Não removido", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(mainActivity, "Local removido com sucesso", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         return viewHolder;
 }
+
+
+    CharSequence text = "Local salvo com Sucesso";
+    int duration = Toast.LENGTH_SHORT;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void deleteData(int index){
+    public boolean deleteData(int index){
         firebaseFirestore.collection("Locais").document(localidadesList.get(index).getId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -71,7 +84,6 @@ public class LocalidadeAdapter extends RecyclerView.Adapter<ViewHolder> {
                         Log.d(TAG, "Local Deletado com Sucesso");
                         localidadesList.clear();
                         mainActivity.showData();
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -79,7 +91,9 @@ public class LocalidadeAdapter extends RecyclerView.Adapter<ViewHolder> {
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Erro!", e);
                     }
+
                 });
+        return false;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -90,8 +104,8 @@ public class LocalidadeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         viewHolder.dataModel.setText(localidade.getData());
         viewHolder.descricaoModel.setText(localidade.getDescricao());
-        viewHolder.latitudeModel.setText(String.format("Lat: %f",localidade.getLat()));
-        viewHolder.longitudeModel.setText(String.format("Lon: %f",localidade.getLon()));
+        viewHolder.latitudeModel.setText(String.format("Latitude: %f",localidade.getLat()));
+        viewHolder.longitudeModel.setText(String.format("Longitude: %f",localidade.getLon()));
         Log.i("Log OnBindViewHolder",localidade.toString());
 
 
